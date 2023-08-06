@@ -1,0 +1,19 @@
+{
+  "name": "rose",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/bot.js",
+  "scripts": {
+    "start": "nodemon src/bot.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "dependencies": {
+    "discord.js": "^14.12.1",
+    "ms": "^2.1.3"
+  }
+}
