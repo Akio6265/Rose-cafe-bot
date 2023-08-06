@@ -13,10 +13,10 @@ module.exports = {
             .setTitle('Welcome', member.user.username)
             .setAuthor({ name: member.user.username, iconURL: member.displayAvatarURL({ dynamic: true }) })
             .setImage('https://w.wallhaven.cc/full/2y/wallhaven-2yoyj9.jpg')
-        member.send({ embeds: [welcome] });
+        // member.send({ embeds: [welcome] });
         let channel = member.guild.channels.cache.get('1136265430869217340');
         if (!channel) channel = member.guild.channels.fetch('1136265430869217340');
-        channel.send({ embeds: [welcome] });
+        // channel.send({ embeds: [welcome], content: `<@${member.user.id}>` });
     }
 
 };
