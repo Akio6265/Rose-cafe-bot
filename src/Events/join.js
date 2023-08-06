@@ -1,4 +1,4 @@
-const { Events, GuildMember } = require('discord.js');
+const { Events, GuildMember, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: Events.GuildMemberAdd,
@@ -7,10 +7,16 @@ module.exports = {
      * @param {GuildMember} member 
      */
     async execute(member) {
-        member.send('welcome to our goofy land');
-        let channel = member.guild.channels.cache.get('1102598609653993493');
-        if (!channel) channel = member.guild.channels.fetch('1102598609653993493');
-        channel.send(member.user.username);
+        if (member.guild.id !== '1135542046711631963') return;
+        const welcome = new EmbedBuilder()
+            .setColor(0xde2e1b)
+            .setTitle('Welcome', member.user.username)
+            .setAuthor({ name: member.user.username, iconURL: member.displayAvatarURL({ dynamic: true }) })
+            .setImage('https://w.wallhaven.cc/full/2y/wallhaven-2yoyj9.jpg')
+        member.send({ embeds: [welcome] });
+        let channel = member.guild.channels.cache.get('1136265430869217340');
+        if (!channel) channel = member.guild.channels.fetch('1136265430869217340');
+        channel.send({ embeds: [welcome] });
     }
 
 };
