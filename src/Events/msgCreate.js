@@ -10,8 +10,7 @@ module.exports = {
      */
     async execute(message) {
         if (message.author.bot) return;
-        //modmail handling
-
+        //dm handling
         if (message.content.startsWith("?") && message.channel.type === 1) {
 
             const args = message.content.slice(1).trim().split(/ +/);
@@ -25,6 +24,7 @@ module.exports = {
                 message.reply('An error occurred while executing the command.');
             }
         }
+
         //commands handling
         if (message.content.startsWith(prefix) && message.channel.type === 0) {
             const args = message.content.slice(prefix.length).trim().split(/ +/);

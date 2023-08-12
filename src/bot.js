@@ -4,7 +4,7 @@ const { Client, Collection, GatewayIntentBits, Partials } = require('discord.js'
 const { token } = require('../config.json');
 
 
-const rose = new Client({
+const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildModeration,
@@ -21,9 +21,9 @@ const rose = new Client({
         Partials.User
     ],
 });
-rose.slash_cmd = new Collection();
-rose.reg_cmd = new Collection();
-module.exports = rose;
+client.slash_cmd = new Collection();
+client.reg_cmd = new Collection();
+module.exports = client;
 
 
 //Events handler
@@ -36,9 +36,9 @@ for (const file of eventFiles) {
     const event = require(filePath);
 
     if (event.once) {
-        rose.once(event.name, (...args) => event.execute(...args));
+        client.once(event.name, (...args) => event.execute(...args));
     } else {
-        rose.on(event.name, (...args) => event.execute(...args))
+        client.on(event.name, (...args) => event.execute(...args))
     }
 }
 //slash commands handler
@@ -54,7 +54,7 @@ for (const subFolder of sub_folders_array) {
         const cmdPath = path.join(sub_folder_path, file);
         const command = require(cmdPath);
         if ('data' in command && 'execute' in command) {
-            rose.slash_cmd.set(command.data.name, command);
+            client.slash_cmd.set(command.data.name, command);
         } else {
             console.log(`[WARNING] The command at ${cmdPath} is missing a required "data" or "execute" property.`);
         }
@@ -71,8 +71,8 @@ for (const sub_folder of sub_cmds_array) {
     for (const Files of cmdFilesArray) {
         const cmdPath = path.join(subCommandPath, Files)
         const command = require(cmdPath)
-        rose.reg_cmd.set(command.name, command);
+        client.reg_cmd.set(command.name, command);
     }
 }
 
-rose.login(token)
+client.login(token)

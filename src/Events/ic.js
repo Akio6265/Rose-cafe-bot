@@ -21,27 +21,5 @@ module.exports = {
                 console.error(error);
             }
         }
-        else if (interaction.isButton()) {
-            const channel = interaction.channel;
-            const user = interaction.user;
-            if (interaction.customId === 'claim') {
-                // Update channel permissions
-                // await channel.permissionOverwrites.edit('1088855389824618517', {
-                //     ViewChannel: false
-                // });
-                await channel.permissionOverwrites.edit(user.id, {
-                    ViewChannel: true
-                });
-                // Send a response message
-                interaction.reply({
-                    content: `This ticket is claimed by <@${user.id}>`
-                });
-            }
-            if (interaction.customId === 'close' && interaction.id !== user.id) {
-                await channel.delete();
-                user.send('Your ticket has been closed');
-            }
-
-        }
     }
 };
