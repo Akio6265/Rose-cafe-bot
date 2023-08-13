@@ -6,6 +6,6 @@ module.exports = {
     async execute(client) {
         console.log(`${client.user.username} is alive`);
         client.user.setStatus('idle');
-        client.user.setActivity("E-Girl server", { type: ActivityType.Watching });
+        client.user.setActivity("E-Girl Socials cute members", { type: ActivityType.Watching });
     },
 };
