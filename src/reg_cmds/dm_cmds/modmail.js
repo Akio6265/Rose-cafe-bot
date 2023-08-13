@@ -1,5 +1,6 @@
 const { EmbedBuilder, Message, ChannelType, userMention, roleMention, time } = require('discord.js')
-const { gId, categoryId } = require('../../../config.json');
+require('dotenv').config();
+
 const rose = require('../../bot');
 
 
@@ -12,11 +13,11 @@ module.exports = {
      */
     execute: async (msg, args) => {
         try {
-            const guild = rose.guilds.cache.get(gId);
-            const category = guild.channels.cache.get(categoryId)
+            const guild = rose.guilds.cache.get(process.env.gId);
+            const category = guild.channels.cache.get(process.env.categoryId)
             // Check if the user has an existing ticket
-            // const existingChannel = guild.channels.cache.find(channel => channel.name === msg.author.tag);
-            // if (existingChannel) return msg.channel.send(`❌ There is already a ticket opened by you!`).then(e => msg.react('❌'));
+            const existingChannel = guild.channels.cache.find(channel => channel.name === msg.author.tag);
+            if (existingChannel) return msg.channel.send(`❌ There is already a ticket opened by you!`).then(e => msg.react('❌'));
 
 
             let member = guild.members.cache.get(msg.author.id);
@@ -27,22 +28,6 @@ module.exports = {
             const roles = rolesMap.map((role) => roleMention(role.id)).join(' ');
             const created = time(member.user.createdAt, 'R');
             const joined = time(member.joinedAt, 'R');
-
-            // const claim = new ButtonBuilder()
-            //     .setCustomId('claim')
-            //     .setLabel('Claim')
-            //     .setEmoji('🫳')
-            //     .setStyle(ButtonStyle.Primary);
-
-            // const close = new ButtonBuilder()
-            //     .setCustomId('close')
-            //     .setLabel('Close')
-            //     .setStyle(ButtonStyle.Danger)
-            //     .setEmoji('🔒');
-
-
-            // const comp = new ActionRowBuilder()
-            //     .addComponents(claim, close);
 
 
             const mention = new EmbedBuilder()
