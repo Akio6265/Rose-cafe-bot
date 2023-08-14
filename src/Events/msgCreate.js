@@ -1,6 +1,5 @@
 const { Events, Message } = require('discord.js');
-require('dotenv').config();
-const prefix = process.env.prefix
+const prefix = '-'
 const rose = require('../bot');
 module.exports = {
     name: Events.MessageCreate,

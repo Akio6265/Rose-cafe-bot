@@ -1,6 +1,5 @@
 const { EmbedBuilder, Message, ChannelType, userMention, roleMention, time } = require('discord.js')
-require('dotenv').config();
-
+const { gId, categoryId } = require('../../../config.json')
 const rose = require('../../bot');
 
 
@@ -13,8 +12,8 @@ module.exports = {
      */
     execute: async (msg, args) => {
         try {
-            const guild = rose.guilds.cache.get(process.env.gId);
-            const category = guild.channels.cache.get(process.env.categoryId)
+            const guild = rose.guilds.cache.get(gId);
+            const category = guild.channels.cache.get(categoryId)
             // Check if the user has an existing ticket
             const existingChannel = guild.channels.cache.find(channel => channel.name === msg.author.tag);
             if (existingChannel) return msg.channel.send(`❌ There is already a ticket opened by you!`).then(e => msg.react('❌'));
