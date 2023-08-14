@@ -38,7 +38,7 @@ module.exports = {
             .setDescription('<a:EGS_CLOUD:1124928678535630849>  **Come chat with us in** https://discord.com/channels/1029523457240739860/1123552387760672778\n\n<a:EGSCLOUD:1124928621694427156>  [Come join us with VC!](https://discord.com/channels/1029523457240739860/1056072538674970694)\n\n<a:EGSCLOUD:1124928621694427156>  **feel free to check out our giveaways **https://discord.com/channels/1029523457240739860/1133162151662604438 https://discord.com/channels/1029523457240739860/1129470784654557294 https://discord.com/channels/1029523457240739860/1139692436323565668')
             .setImage('https://cdn.discordapp.com/attachments/1139856341381431376/1139985585411473408/divider1.gif')
             .setFooter({ text: 'E-Girl social wishes you a pleasent stay' })
-        channel.send({ content: `:1499sparkleheart: welcome ${userMention(member.user.id)} :1499sparkleheart:`, embeds: [welcome], components: [row] });
+        channel.send({ content: `<a:1499sparkleheart:1046448101860331600> welcome ${userMention(member.user.id)} <a:1499sparkleheart:1046448101860331600>`, embeds: [welcome], components: [row] });
 
 
     }

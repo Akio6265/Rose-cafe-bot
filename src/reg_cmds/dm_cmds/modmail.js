@@ -78,7 +78,7 @@ module.exports = {
             });
             channel.lockPermissions()
                 .catch(e => channel.send('some error appeared'))
-            channel.send({ embeds: [mention], content: `${userMention('1067657421155217489')}, ${userMention('1067655061339119738')}, ${'1071695813736144987'}` })
+            channel.send({ embeds: [mention], content: `${userMention('1067657421155217489')}, ${userMention('1067655061339119738')}, ${userMention('1071695813736144987')}` })
                 .then(e => {
                     msg.react('✅');
                     msg.channel.send(`Your ticket has been created, Please wait for someone to respond.`);
