@@ -1,5 +1,5 @@
-const { EmbedBuilder, Message, ChannelType, roleMention, time, userMention } = require('discord.js')
-const { gId, categoryId } = require('../../../config.json')
+const { EmbedBuilder, Message, ChannelType, roleMention, time, userMention } = require('discord.js');
+const { gId, categoryId } = require('../../../config.json');
 const rose = require('../../bot');
 
 
@@ -28,8 +28,8 @@ module.exports = {
             const created = time(member.user.createdAt, 'R');
             const joined = time(member.joinedAt, 'R');
 
-            let staff = guild.roles.cache;
-            if (!staff) staff = await guild.roles.fetch();
+            //  let staff = guild.roles.cache;
+            //  if (!staff) staff = await guild.roles.fetch();
 
             const mention = new EmbedBuilder()
                 .setColor(0xe645b8)
@@ -79,7 +79,7 @@ module.exports = {
                 ]
             });
             channel.lockPermissions()
-                .catch(e => channel.send('some error appeared'))
+                .catch(e => channel.send('some error appeared'));
             channel.send({ embeds: [mention], content: `${roleMention('1067657421155217489')}, ${roleMention('1067655061339119738')}, ${roleMention('1071695813736144987')}` })
                 .then(e => {
                     msg.react('✅');
@@ -104,10 +104,10 @@ module.exports = {
                     case 'close':
                         channel.delete()
                             .then(() => {
-                                msg.reply('Your ticket has been closed')
+                                msg.reply('Your ticket has been closed');
                             })
                             .catch((error) => {
-                                message.reply('Some error appeared, call Aki')
+                                message.reply('Some error appeared, call Aki');
                             });
                         break;
                     case 'reply':
@@ -125,7 +125,7 @@ module.exports = {
                             msg.channel.send({ embeds: [replyEmbed] });
                         }).then(() => {
                             message.channel.send({ embeds: [replyEmbed] });
-                        })
+                        });
                         break;
                     default:
                         break;
@@ -150,13 +150,13 @@ module.exports = {
                 channel.send({ embeds: [reply] }).then(e => {
                     message.react('✅');
 
-                })
-            })
+                });
+            });
 
 
         } catch (err) {
-            console.log(err)
-            msg.reply('some error appeared, ping aki on the server.')
+            console.log(err);
+            msg.reply('some error appeared, call aki on the server.');
         }
     }
-}
+};
