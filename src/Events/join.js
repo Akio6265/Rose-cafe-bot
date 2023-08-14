@@ -1,4 +1,4 @@
-const { Events, GuildMember, EmbedBuilder } = require('discord.js');
+const { Events, GuildMember, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, userMention } = require('discord.js');
 
 module.exports = {
     name: Events.GuildMemberAdd,
@@ -7,9 +7,10 @@ module.exports = {
      * @param {GuildMember} member 
      */
     async execute(members) {
-        if (members.guild.id !== '1135542046711631963') return;
+        if (members.guild.id !== '1029523457240739860') return;
+
         const member = await members.guild.members.fetch(members.id);
-        const channel = await members.guild.channels.fetch('1123552387760672778')
+        const channel = await members.guild.channels.fetch('1123552387760672778');
         const link = new ButtonBuilder()
             .setLabel('Click this!')
             .setURL('https://discord.gg/socializing')
