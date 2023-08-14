@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits, Partials } = require('discord.js');
-require('dotenv').config();
+const { token } = require('../config.json')
 
 
 const client = new Client({
@@ -75,4 +75,4 @@ for (const sub_folder of sub_cmds_array) {
     }
 }
 
-client.login(process.env.token)
+client.login(token)
