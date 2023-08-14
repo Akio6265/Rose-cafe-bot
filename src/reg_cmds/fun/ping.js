@@ -8,11 +8,9 @@ module.exports = {
      * @param {Message} msg 
      */
     execute: async (msg, args) => {
-        if (!args) return message.reply('invalid value');
-        const message = args.join(' ');
-        msg.channel.send(message).then((e) => {
-            msg.delete();
-        })
+        if (args.length === 0) return
+
+        msg.reply('pong');
 
 
     }
