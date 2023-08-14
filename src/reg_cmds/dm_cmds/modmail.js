@@ -61,16 +61,24 @@ module.exports = {
                         id: guild.id,
                         deny: 'ViewChannel'
                     },
-                    // {
-                    //     id: '1088855389824618517',//staff role here
-                    //     allow: ['ViewChannel']
-                    // }
+                    {
+                        id: '1067655061339119738',//staff role here
+                        allow: ['ViewChannel']
+                    },
+                    {
+                        id: '1071695813736144987',//staff role here
+                        allow: ['ViewChannel']
+                    },
+                    {
+                        id: '1067657421155217489',//staff role here
+                        allow: ['ViewChannel']
+                    }
 
                 ]
             });
             channel.lockPermissions()
                 .catch(e => channel.send('some error appeared'))
-            channel.send({ embeds: [mention] })
+            channel.send({ embeds: [mention], content: `${userMention('1067657421155217489')}, ${userMention('1067655061339119738')}, ${'1071695813736144987'}` })
                 .then(e => {
                     msg.react('✅');
                     msg.channel.send(`Your ticket has been created, Please wait for someone to respond.`);

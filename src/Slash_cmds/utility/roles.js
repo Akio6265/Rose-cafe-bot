@@ -10,6 +10,7 @@ module.exports = {
         )
     , category: 'utility',
     async execute(interaction) {
+        if (!interaction.user.id('952975852801523762')) return;
         const emm = async function (roles) {
             const roleNames = await roles.map((role) => `<@&${role.id}>`).join('\n');
             const roleEmbed = new EmbedBuilder()
