@@ -91,15 +91,7 @@ module.exports = {
                 const argument = message.content.slice(1).trim().split(/ +/);
                 const command = argument.shift().toLocaleLowerCase();
                 const reply = argument.join(' ');
-                const replyEmbed = new EmbedBuilder()
-                    .setColor(0xe645b8)
-                    .setAuthor({
-                        name: message.author.username,
-                        iconURL: message.author.displayAvatarURL({ dynamic: true })
-                    })
-                    .setDescription(reply)
-                    .setFooter({ text: `messageID: ${message.id}` })
-                    .setTimestamp();
+
                 switch (command) {
                     case 'close':
                         channel.delete()
