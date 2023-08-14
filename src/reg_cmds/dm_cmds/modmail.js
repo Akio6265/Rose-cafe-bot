@@ -28,7 +28,7 @@ module.exports = {
             const created = time(member.user.createdAt, 'R');
             const joined = time(member.joinedAt, 'R');
 
-            const staff = guild.roles.cache;
+            let staff = guild.roles.cache;
             if (!staff) staff = await guild.roles.fetch();
 
             const mention = new EmbedBuilder()
@@ -112,6 +112,15 @@ module.exports = {
                         break;
                     case 'reply':
                         if (!reply) return;
+                        const replyEmbed = new EmbedBuilder()
+                            .setColor(0xe645b8)
+                            .setAuthor({
+                                name: message.author.username,
+                                iconURL: message.author.displayAvatarURL({ dynamic: true })
+                            })
+                            .setDescription(reply)
+                            .setFooter({ text: `messageID: ${message.id}` })
+                            .setTimestamp();
                         message.delete().then(() => {
                             msg.channel.send({ embeds: [replyEmbed] });
                         }).then(() => {
