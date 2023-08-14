@@ -1,4 +1,4 @@
-const { EmbedBuilder, Message, ChannelType, userMention, roleMention, time } = require('discord.js')
+const { EmbedBuilder, Message, ChannelType, roleMention, time } = require('discord.js')
 const { gId, categoryId } = require('../../../config.json')
 const rose = require('../../bot');
 
@@ -28,6 +28,8 @@ module.exports = {
             const created = time(member.user.createdAt, 'R');
             const joined = time(member.joinedAt, 'R');
 
+            const staff = guild.roles.cache;
+            if (!staff) staff = await guild.roles.fetch();
 
             const mention = new EmbedBuilder()
                 .setColor(0xe645b8)
@@ -78,7 +80,7 @@ module.exports = {
             });
             channel.lockPermissions()
                 .catch(e => channel.send('some error appeared'))
-            channel.send({ embeds: [mention], content: `${userMention('1067657421155217489')}, ${userMention('1067655061339119738')}, ${userMention('1071695813736144987')}` })
+            channel.send({ embeds: [mention], content: `${roleMention('1067657421155217489')}, ${roleMention('1067655061339119738')}, ${roleMention('1071695813736144987')}` })
                 .then(e => {
                     msg.react('✅');
                     msg.channel.send(`Your ticket has been created, Please wait for someone to respond.`);
@@ -89,7 +91,6 @@ module.exports = {
                 const argument = message.content.slice(1).trim().split(/ +/);
                 const command = argument.shift().toLocaleLowerCase();
                 const reply = argument.join(' ');
-                if (!reply) return;
                 const replyEmbed = new EmbedBuilder()
                     .setColor(0xe645b8)
                     .setAuthor({
@@ -110,6 +111,7 @@ module.exports = {
                             });
                         break;
                     case 'reply':
+                        if (!reply) return;
                         message.delete().then(() => {
                             msg.channel.send({ embeds: [replyEmbed] });
                         }).then(() => {
