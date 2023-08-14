@@ -91,7 +91,6 @@ module.exports = {
                 const argument = message.content.slice(1).trim().split(/ +/);
                 const command = argument.shift().toLocaleLowerCase();
                 const reply = argument.join(' ');
-
                 switch (command) {
                     case 'close':
                         channel.delete()

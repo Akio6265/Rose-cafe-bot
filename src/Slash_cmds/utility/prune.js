@@ -17,7 +17,7 @@ module.exports = {
 	 */
 	async execute(interaction) {
 		const amount = interaction.options.getInteger('amount');
-		if (!interaction.user.id('952975852801523762')) return;
+		if (interaction.user.id !== '952975852801523762') return;
 		await interaction.channel.bulkDelete(amount, true).catch(error => {
 			console.error(error);
 			interaction.reply({ content: 'There was an error trying to prune messages in this channel!', ephemeral: true });
