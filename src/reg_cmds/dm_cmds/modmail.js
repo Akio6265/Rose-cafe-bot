@@ -88,14 +88,17 @@ module.exports = {
             const collector = channel.createMessageCollector();
 
             collector.on('collect', (message) => {
+                if (!message.content.startsWith('?')) return;
                 const argument = message.content.slice(1).trim().split(/ +/);
                 const command = argument.shift().toLocaleLowerCase();
                 const reply = argument.join(' ');
                 switch (command) {
                     case 'close':
+                        dmCollection.stop(); // Stop the dmCollection here
                         channel.delete()
                             .then(() => {
                                 msg.reply('Your ticket has been closed');
+                                collector.stop();
                             })
                             .catch((error) => {
                                 message.reply('Some error appeared, call Aki');
