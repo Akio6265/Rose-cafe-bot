@@ -23,17 +23,16 @@ const User = sequelize.define('User', {
         allowNull: false,
         primaryKey: true,
         unique: true
-
     },
     name: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    messageCount: {
+    chatXp: {
         type: DataTypes.INTEGER,
         defaultValue: 0
     },
-    chatXp: {
+    messageCount: {
         type: DataTypes.INTEGER,
         defaultValue: 0
     },
@@ -53,14 +52,6 @@ const User = sequelize.define('User', {
     tableName: 'user',
     timestamps: true,
 });
-
-sequelize.sync({ alter: true })
-    .then(() => {
-        console.log('Tables, set.');
-    })
-    .catch((err) => {
-        console.error('Error synchronizing tables:', err);
-    });
 module.exports = {
     User
 }

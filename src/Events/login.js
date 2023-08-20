@@ -43,7 +43,7 @@ module.exports = {
         const channel = await client.channels.cache.get("1111556882088341505"); // channel id here
 
         await channel.bulkDelete(2, true).catch(error => {
-            console.error(error)
+            console.error(error);
         });
         let time = new Date(Date.now() + (24 * 60 * 60 * 1000)).toLocaleString();
 
@@ -71,7 +71,7 @@ module.exports = {
             .addFields(
                 {
                     name: '__All-time leaderboard__',
-                    value: userAllTimeVC.map((user, index) => `${index + 1}. ${user.name} <a:TH_arrow2:1142515854685249626> ${user.vcXp} exp`).join('\n'),
+                    value: userAllTimeVC.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1142756362988834907> ${user.vcXp} exp`).join('\n'),
                     inline: false
                 },
                 {
@@ -116,7 +116,7 @@ module.exports = {
                     .addFields(
                         {
                             name: '__All-time leaderboard__',
-                            value: userAllTimeVC.map((user, index) => `${index + 1}. ${user.name} <a:TH_arrow2:1142515854685249626> ${user.vcXp} exp`).join('\n'),
+                            value: userAllTimeVC.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1142756362988834907> ${user.vcXp} exp`).join('\n'),
                             inline: false
                         },
                         {
@@ -140,9 +140,6 @@ module.exports = {
 
 
         //chat
-
-
-
         let userLastWeek = await getUser(oneWeekAgo, new Date()) ?? "No one yet lol";
         let userLastDay = await getUser(oneDayAgo, new Date()) ?? "No one yet";
         let userAllTime = await User.findAll({
@@ -161,7 +158,7 @@ module.exports = {
             .addFields(
                 {
                     name: '__All-time leaderboard__',
-                    value: userAllTime.map((user, index) => `${index + 1}. ${user.name} <a:TH_arrow2:1142515854685249626> ${user.messageCount} messages`).join('\n'),
+                    value: userAllTime.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1142756362988834907> ${user.messageCount} messages`).join('\n'),
                     inline: false
                 },
                 {
@@ -201,6 +198,7 @@ module.exports = {
                     ],
                     limit: 10
                 });
+                console.log(userLastDay)
                 const updatedChat = new EmbedBuilder()
                     .setTitle("Chat Leaderboard")
                     .setColor(0xffa8ff)
@@ -208,7 +206,7 @@ module.exports = {
                     .addFields(
                         {
                             name: '__All-time leaderboard__',
-                            value: userAllTime.map((user, index) => `${index + 1}. ${user.name} <a:TH_arrow2:1142515854685249626> ${user.messageCount} messages`).join('\n'),
+                            value: userAllTime.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1142756362988834907> ${user.messageCount} messages`).join('\n'),
                             inline: false
                         },
                         {

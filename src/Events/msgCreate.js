@@ -19,7 +19,7 @@ module.exports = {
             const [user, created] = await User.findOrCreate({
                 where: { uid: message.author.id },
                 defaults: {
-                    name: message.author.globalName
+                    name: message.author.username
                 }
             });
             if (created) {
