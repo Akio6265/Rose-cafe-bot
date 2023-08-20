@@ -15,12 +15,12 @@ module.exports = {
 
             if (voiceStartTime) {
                 const voiceDuration = new Date() - voiceStartTime; // Calculate the duration
-                const requireExp = (Math.pow(User.vcLevel, 2) * 200) + User.vcLevel * 100;
                 const xpIncrement = Math.floor(voiceDuration / 1000); // Define the xp increment based on duration
 
                 try {
                     const user = await User.findByPk(userId); // Find the user in the database
                     if (user) {
+                        const requireExp = (Math.pow(user.vcLevel, 2) * 200) + user.vcLevel * 100;
                         user.vcXp += xpIncrement; // Update vcXp by incrementing it with xpIncrement
                         if (user.vcXp >= requireExp) {
                             user.vcLevel += 1;
