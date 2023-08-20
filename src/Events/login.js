@@ -1,6 +1,6 @@
-const { Events, ActivityType, EmbedBuilder } = require('discord.js');
-const Sequelize = require('sequelize');
-const { User } = require('../../db');
+const { Events, ActivityType, EmbedBuilder, userMention } = require('discord.js');
+const { Sequelize, Op } = require('sequelize');
+const { User, Count } = require('../../db');
 
 //chat
 async function getUser(startDate, endDate) {
@@ -32,6 +32,35 @@ async function getUserVc(startDate, endDate) {
     });
     return result;
 }
+//reset fun
+async function resetDaily() {
+    try {
+        const users = await Count.findAll();
+        for (const user of users) {
+            user.dailyMsg = 0;
+            user.dailyVc = 0
+            await user.save().catch(error => console.error('Error:', error));;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+async function resetWeekly() {
+    try {
+        const users = await Count.findAll();
+        for (const user of users) {
+            user.weeklyMsg = 0;
+            user.weeklVc = 0;
+            await user.save().catch(error => console.error('Error:', error));
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+
+
+// ...
 module.exports = {
     name: Events.ClientReady,
     once: true,
@@ -63,7 +92,26 @@ module.exports = {
             ],
             limit: 10
         });
-
+        const weeklyMsgvc = [];
+        const dailyMsgvc = [];
+        for (const user of userLastWeekVc) {
+            let x = await Count.findOne({
+                where: {
+                    uid: user.uid
+                }
+            });
+            let msg = x?.weeklyVc ?? "0"
+            weeklyMsgvc.push(msg);
+        };
+        for (const user of userLastDayVC) {
+            let x = await Count.findOne({
+                where: {
+                    uid: user.uid
+                }
+            });
+            let msg = x?.dailyVc ?? "0"
+            dailyMsgvc.push(msg);
+        }
         const vc = new EmbedBuilder()
             .setTitle("Vc Leaderboard")
             .setColor(0xffa8ff)
@@ -71,19 +119,19 @@ module.exports = {
             .addFields(
                 {
                     name: '__All-time leaderboard__',
-                    value: userAllTimeVC.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1142756362988834907> ${user.vcXp} exp`).join('\n'),
+                    value: userAllTimeVC.map((user, index) => `${index + 1}. ${userMention(user.uid)}> <a:arrowyellow:1038546631689252945> ${user.vcXp} xp in total.`).join('\n'),
                     inline: false
                 },
                 {
                     name: '__Weekly leaderboard__',
-                    value: userLastWeekVc.map((user, index) => `${index + 1}. ${user.name}`).join('\n'),
+                    value: userLastWeekVc.map((user, index) => `${index + 1}. ${userMention(user.uid)} <a:arrow_purple:1142745834795048971> ${weeklyMsgvc[index]} minutes in vc this week.`).join('\n'),
                     inline: false
                 },
                 {
                     name: '__Daily leaderboard__',
-                    value: userLastDayVC.map((user, index) => `${index + 1}. ${user.name}`).join('\n'),
+                    value: userLastDayVC.map((user, index) => `${index + 1}. ${userMention(user.uid)}  <a:arrowegs:1038546626765144064> ${dailyMsgvc[index]} minutes in vc today.`).join('\n'),
                     inline: false
-                },
+                }
             )
             .setImage('https://cdn.discordapp.com/attachments/1139856341381431376/1139985585411473408/divider1.gif')
             .setFooter({ text: `This leaderboard will update again at ${time}`, iconURL: "https://cdn.discordapp.com/attachments/1139856341381431376/1139981548955910324/image0.gif" });
@@ -108,6 +156,26 @@ module.exports = {
                     ],
                     limit: 10
                 });
+                const weeklyMsgvc = [];
+                const dailyMsgvc = [];
+                for (const user of userLastWeekVc) {
+                    let x = await Count.findOne({
+                        where: {
+                            uid: user.uid
+                        }
+                    });
+                    let msg = x?.weeklyVc ?? "0"
+                    weeklyMsgvc.push(msg);
+                };
+                for (const user of userLastDayVC) {
+                    let x = await Count.findOne({
+                        where: {
+                            uid: user.uid
+                        }
+                    });
+                    let msg = x?.dailyVc ?? "0"
+                    dailyMsgvc.push(msg);
+                }
                 let time = new Date(Date.now() + (24 * 60 * 60 * 1000)).toLocaleString();
                 let updatedChat = new EmbedBuilder()
                     .setTitle("Vc Leaderboard")
@@ -116,25 +184,26 @@ module.exports = {
                     .addFields(
                         {
                             name: '__All-time leaderboard__',
-                            value: userAllTimeVC.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1142756362988834907> ${user.vcXp} exp`).join('\n'),
+                            value: userAllTimeVC.map((user, index) => `${index + 1}. ${userMention(user.uid)}> <a:arrowyellow:1038546631689252945> ${user.vcXp} xp in total.`).join('\n'),
                             inline: false
                         },
                         {
                             name: '__Weekly leaderboard__',
-                            value: userLastWeekVc.map((user, index) => `${index + 1}. ${user.name}`).join('\n'),
+                            value: userLastWeekVc.map((user, index) => `${index + 1}. ${userMention(user.uid)} <a:arrow_purple:1142745834795048971> ${weeklyMsgvc[index]} minutes in vc this week.`).join('\n'),
                             inline: false
                         },
                         {
                             name: '__Daily leaderboard__',
-                            value: userLastDayVC.map((user, index) => `${index + 1}. ${user.name}`).join('\n'),
+                            value: userLastDayVC.map((user, index) => `${index + 1}. ${userMention(user.uid)}  <a:arrowegs:1038546626765144064> ${dailyMsgvc[index]} minutes in vc today.`).join('\n'),
                             inline: false
-                        },
+                        }
 
                     )
                     .setImage('https://cdn.discordapp.com/attachments/1139856341381431376/1139985585411473408/divider1.gif')
                     .setFooter({ text: `This leaderboard will update again at ${time}`, iconURL: "https://cdn.discordapp.com/attachments/1139856341381431376/1139981548955910324/image0.gif" });
 
                 await message.edit({ embeds: [updatedChat] });
+                await resetWeekly();
             }, 24 * 60 * 60 * 1000);
         });
 
@@ -149,7 +218,26 @@ module.exports = {
             ],
             limit: 10
         });
-
+        const weeklyMsg = [];
+        const dailyMsg = [];
+        for (const user of userLastWeek) {
+            let x = await Count.findOne({
+                where: {
+                    uid: user.uid
+                }
+            });
+            let msg = x?.weeklyMsg ?? "0"
+            weeklyMsg.push(msg);
+        };
+        for (const user of userLastDay) {
+            let x = await Count.findOne({
+                where: {
+                    uid: user.uid
+                }
+            });
+            let msg = x?.dailyMsg ?? "0"
+            dailyMsg.push(msg);
+        }
         // console.log(userAllTime)
         const chat = new EmbedBuilder()
             .setTitle("Chat Leaderboard")
@@ -158,17 +246,17 @@ module.exports = {
             .addFields(
                 {
                     name: '__All-time leaderboard__',
-                    value: userAllTime.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1142756362988834907> ${user.messageCount} messages`).join('\n'),
+                    value: userAllTime.map((user, index) => `${index + 1}. ${userMention(user.uid)} <a:arrowyellow:1038546631689252945> ${user.messageCount} messages in total.`).join('\n'),
                     inline: false
                 },
                 {
                     name: '__Weekly leaderboard__',
-                    value: userLastWeek.map((user, index) => `${index + 1}. ${user.name}`).join('\n'),
+                    value: userLastWeek.map((user, index) => `${index + 1}. ${userMention(user.uid)} <a:arrow_purple:1142745834795048971> ${weeklyMsg[index]} messages this week.`).join('\n'),
                     inline: false
                 },
                 {
                     name: '__Daily leaderboard__',
-                    value: userLastDay.map((user, index) => `${index + 1}. ${user.name}`).join('\n'),
+                    value: userLastDay.map((user, index) => `${index + 1}. ${userMention(user.uid)} <a:arrowegs:1038546626765144064> ${dailyMsg[index]} messages today.`).join('\n'),
                     inline: false
                 },
             )
@@ -179,10 +267,9 @@ module.exports = {
         await channel.send({
             embeds: [chat]
         }).then((message) => {
+            let timer = 24 * 60 * 60 * 1000;
             setInterval(async () => {
-
                 let time = new Date(Date.now() + (24 * 60 * 60 * 1000)).toLocaleString();
-
                 let oneWeekAgo = new Date();
                 oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
@@ -198,7 +285,27 @@ module.exports = {
                     ],
                     limit: 10
                 });
-                console.log(userLastDay)
+                const weeklyMsg = [];
+                const dailyMsg = [];
+                for (const user of userLastWeek) {
+                    let x = await Count.findOne({
+                        where: {
+                            uid: user.uid
+                        }
+                    });
+                    let msg = x?.weeklyMsg ?? "0"
+                    weeklyMsg.push(msg);
+                };
+                for (const user of userLastDay) {
+                    let x = await Count.findOne({
+                        where: {
+                            uid: user.uid
+                        }
+                    });
+                    let msg = x?.dailyMsg ?? "0"
+                    dailyMsg.push(msg);
+                }
+
                 const updatedChat = new EmbedBuilder()
                     .setTitle("Chat Leaderboard")
                     .setColor(0xffa8ff)
@@ -206,30 +313,30 @@ module.exports = {
                     .addFields(
                         {
                             name: '__All-time leaderboard__',
-                            value: userAllTime.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1142756362988834907> ${user.messageCount} messages`).join('\n'),
+                            value: userAllTime.map((user, index) => `${index + 1}. ${userMention(user.uid)} <a:arrowyellow:1038546631689252945> ${user.messageCount} messages in total.`).join('\n'),
                             inline: false
                         },
                         {
                             name: '__Weekly leaderboard__',
-                            value: userLastWeek.map((user, index) => `${index + 1}. ${user.name}`).join('\n'),
+                            value: userLastWeek.map((user, index) => `${index + 1}. ${userMention(user.uid)} <a:arrow_purple:1142745834795048971> ${weeklyMsg[index]} messages this week.`).join('\n'),
                             inline: false
                         },
                         {
                             name: '__Daily leaderboard__',
-                            value: userLastDay.map((user, index) => `${index + 1}. ${user.name}`).join('\n'),
+                            value: userLastDay.map((user, index) => `${index + 1}. ${userMention(user.uid)} <a:arrowegs:1038546626765144064> ${dailyMsg[index]} messages today.`).join('\n'),
                             inline: false
                         },
-
                     )
                     .setImage('https://cdn.discordapp.com/attachments/1139856341381431376/1139985585411473408/divider1.gif')
                     .setFooter({ text: `This leaderboard will update again at ${time}`, iconURL: "https://cdn.discordapp.com/attachments/1139856341381431376/1139981548955910324/image0.gif" });
 
                 await message.edit({ embeds: [updatedChat] });
-            }, 24 * 60 * 60 * 1000);
+                await resetDaily();
+            }, timer);
         });
 
-
-
-
+        setInterval(() => {
+            resetWeekly();
+        }, 7 * 24 * 60 * 60 * 1000 + 30000);
     },
 };

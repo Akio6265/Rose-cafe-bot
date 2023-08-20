@@ -1,7 +1,9 @@
 //database
 
 const { Sequelize, DataTypes } = require('sequelize');
-
+/**
+ * @param {sequelize}  
+ */
 const { host, password, username, db, port } = require('./config.json')
 const sequelize = new Sequelize(db, username, password, {
     host: host,
@@ -22,7 +24,8 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true,
-        unique: true
+        unique: true,
+        foreignKey: true
     },
     name: {
         type: DataTypes.STRING,
@@ -52,6 +55,36 @@ const User = sequelize.define('User', {
     tableName: 'user',
     timestamps: true,
 });
+
+const Count = sequelize.define("count", {
+    uid: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true,
+        unique: true,
+        foreignKey: true
+    },
+    dailyMsg: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
+    weeklyMsg: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
+    dailyVc: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
+    weeklyVc: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    }
+
+});
+sequelize.sync({ alter: true })
+    .then(() => console.log('tables, set'))
+    .catch(err => console.log(err))
 module.exports = {
-    User
+    User, Count
 }

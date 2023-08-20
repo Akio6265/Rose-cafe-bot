@@ -1,6 +1,6 @@
 
 const { Events, EmbedBuilder } = require('discord.js');
-const { User } = require('../../db');
+const { User, Count } = require('../../db');
 
 module.exports = {
 
@@ -16,6 +16,24 @@ module.exports = {
             if (voiceStartTime) {
                 const voiceDuration = new Date() - voiceStartTime; // Calculate the duration
                 const xpIncrement = Math.floor(voiceDuration / 1000); // Define the xp increment based on duration
+                try {
+                    let userCount = await Count.findByPk(userId);
+
+                    if (!userCount) {
+                        userCount = await Count.create({
+                            uid: userId,
+                        });
+                    }
+
+
+                    userCount.dailyVc += (xpIncrement / 60).toFixed(2);
+                    userCount.weeklyVc += (xpIncrement / 60).toFixed(2);
+                    await userCount.save()
+                        .catch(error => console.error('Error:', error));
+
+                } catch (error) {
+                    console.error('Error:', error);
+                };
 
                 try {
                     const user = await User.findByPk(userId); // Find the user in the database
@@ -29,7 +47,6 @@ module.exports = {
                             .catch(err => {
                                 console.log(err)
                             }); // Save the updated user in the database
-
                     }
                 } catch (error) {
                     console.error(`Error updating vcXp and vcLevel for user ${userId}: ${error}`);

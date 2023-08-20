@@ -1,8 +1,8 @@
 const { Events, Message } = require('discord.js');
 const prefix = '-'
 const rose = require('../bot');
-const { User } = require('../../db');
-const randomExp = Math.floor(Math.random() * 4) + 5;
+const { User, Count } = require('../../db');
+const randomExp = Math.floor(Math.random() * 4) + 3;
 
 module.exports = {
     name: Events.MessageCreate,
@@ -43,6 +43,24 @@ module.exports = {
         } catch (err) {
             console.log(err)
         }
+        //daily weekly
+        try {
+            let userCount = await Count.findOne({ where: { uid: message.author.id } });
+
+            if (!userCount) {
+                userCount = await Count.create({
+                    uid: message.author.id,
+                });
+            }
+            userCount.dailyMsg += 1;
+            userCount.weeklyMsg += 1;
+
+            await userCount.save().catch(error => console.error('Error:', error));
+        } catch (error) {
+            console.error('Error:', error);
+        };
+
+
         //dm handling
         if (message.content.startsWith("?") && message.channel.type === 1) {
 
