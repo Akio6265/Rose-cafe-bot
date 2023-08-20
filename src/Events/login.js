@@ -84,7 +84,12 @@ module.exports = {
             .setFooter({ text: `This leaderboard will update again at ${time}`, iconURL: "https://cdn.discordapp.com/attachments/1139856341381431376/1139981548955910324/image0.gif" });
 
         const channel = await client.channels.cache.get("1111556882088341505"); // channel id here
-        channel.send({
+
+        await channel.bulkDelete(2, true).catch(error => {
+            console.error(error)
+        });
+
+        await channel.send({
             embeds: [chat]
         }).then((message) => {
             setInterval(async () => {
