@@ -1,6 +1,9 @@
 const { Events, Message } = require('discord.js');
 const prefix = '-'
 const rose = require('../bot');
+const { User } = require('../../db');
+const randomExp = Math.floor(Math.random() * 4) + 5;
+
 module.exports = {
     name: Events.MessageCreate,
     on: true,
@@ -10,6 +13,36 @@ module.exports = {
      */
     async execute(message) {
         if (message.author.bot) return;
+        //chatXp handling
+        try {
+            // Find or create the user
+            const [user, created] = await User.findOrCreate({
+                where: { uid: message.author.id },
+                defaults: {
+                    name: message.author.globalName
+                }
+            });
+            if (created) {
+                user.messageCount += 1;
+                await user.save();
+            }
+            else if (user) {
+                user.messageCount += 1;
+                user.chatXp += randomExp;
+                const requireExp = Math.pow(user.chatLevel, 2) * 200;
+                // console.log(`${requireExp},  ${user.chatXp}`)
+                if (user.chatXp >= requireExp) {
+                    user.chatLevel += 1;
+                }
+                await user.save()
+                    .catch(err => {
+                        console.log(err)
+                    });
+            };
+
+        } catch (err) {
+            console.log(err)
+        }
         //dm handling
         if (message.content.startsWith("?") && message.channel.type === 1) {
 
@@ -31,7 +64,7 @@ module.exports = {
             const commandName = args.shift().toLowerCase();
 
             const command = rose.reg_cmd.get(commandName)
-            if (!command) return message.react('<a:CB_alfa_disgusting:1136568825303793675>').then(() => {
+            if (!command) return message.react('<a:OHWOOOW:1038546514907250818>').then(() => {
                 message.reply('I dont have this command...')
                     .then((msg) => {
                         setTimeout(() => {
