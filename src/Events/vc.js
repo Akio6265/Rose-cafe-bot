@@ -26,11 +26,11 @@ module.exports = {
                     }
 
 
-                    userCount.dailyVc += (xpIncrement / 60).toFixed(2);
-                    userCount.weeklyVc += (xpIncrement / 60).toFixed(2);
+                    userCount.dailyVc += Math.floor((xpIncrement / 60))
+                    userCount.weeklyVc += Math.floor((xpIncrement / 60))
                     await userCount.save()
                         .catch(error => console.error('Error:', error));
-
+                    // console.log(userCount.dailyVc)
                 } catch (error) {
                     console.error('Error:', error);
                 };

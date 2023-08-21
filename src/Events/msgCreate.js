@@ -19,7 +19,7 @@ module.exports = {
             const [user, created] = await User.findOrCreate({
                 where: { uid: message.author.id },
                 defaults: {
-                    name: message.author.username
+                    name: `${message.author.username}#${message.author.discriminator}`
                 }
             });
             if (created) {
@@ -29,7 +29,7 @@ module.exports = {
             else if (user) {
                 user.messageCount += 1;
                 user.chatXp += randomExp;
-                const requireExp = Math.pow(user.chatLevel, 2) * 200;
+                const requireExp = Math.pow(user.chatLevel, 2) * 300;
                 // console.log(`${requireExp},  ${user.chatXp}`)
                 if (user.chatXp >= requireExp) {
                     user.chatLevel += 1;

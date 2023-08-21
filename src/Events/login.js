@@ -119,17 +119,17 @@ module.exports = {
             .addFields(
                 {
                     name: '__All-time leaderboard__',
-                    value: userAllTimeVC.map((user, index) => `${index + 1}. ${userMention(user.uid)}> <a:arrowyellow:1038546631689252945> ${user.vcXp} xp in total.`).join('\n'),
+                    value: userAllTimeVC.map((user, index) => `${index + 1}. ${user.name}> <a:arrowyellow:1038546631689252945> ${user.vcXp} xp in total.`).join('\n'),
                     inline: false
                 },
                 {
                     name: '__Weekly leaderboard__',
-                    value: userLastWeekVc.map((user, index) => `${index + 1}. ${userMention(user.uid)} <a:arrow_purple:1142745834795048971> ${weeklyMsgvc[index]} minutes in vc this week.`).join('\n'),
+                    value: userLastWeekVc.map((user, index) => `${index + 1}. ${user.name} <a:arrow_purple:1142745834795048971> ${weeklyMsgvc[index]} minutes in vc this week.`).join('\n'),
                     inline: false
                 },
                 {
                     name: '__Daily leaderboard__',
-                    value: userLastDayVC.map((user, index) => `${index + 1}. ${userMention(user.uid)}  <a:arrowegs:1038546626765144064> ${dailyMsgvc[index]} minutes in vc today.`).join('\n'),
+                    value: userLastDayVC.map((user, index) => `${index + 1}. ${user.name}  <a:arrowegs:1038546626765144064> ${dailyMsgvc[index]} minutes in vc today.`).join('\n'),
                     inline: false
                 }
             )
@@ -184,17 +184,17 @@ module.exports = {
                     .addFields(
                         {
                             name: '__All-time leaderboard__',
-                            value: userAllTimeVC.map((user, index) => `${index + 1}. ${userMention(user.uid)}> <a:arrowyellow:1038546631689252945> ${user.vcXp} xp in total.`).join('\n'),
+                            value: userAllTimeVC.map((user, index) => `${index + 1}. ${user.name}> <a:arrowyellow:1038546631689252945> ${user.vcXp} xp in total.`).join('\n'),
                             inline: false
                         },
                         {
                             name: '__Weekly leaderboard__',
-                            value: userLastWeekVc.map((user, index) => `${index + 1}. ${userMention(user.uid)} <a:arrow_purple:1142745834795048971> ${weeklyMsgvc[index]} minutes in vc this week.`).join('\n'),
+                            value: userLastWeekVc.map((user, index) => `${index + 1}. ${user.name} <a:arrow_purple:1142745834795048971> ${weeklyMsgvc[index]} minutes in vc this week.`).join('\n'),
                             inline: false
                         },
                         {
                             name: '__Daily leaderboard__',
-                            value: userLastDayVC.map((user, index) => `${index + 1}. ${userMention(user.uid)}  <a:arrowegs:1038546626765144064> ${dailyMsgvc[index]} minutes in vc today.`).join('\n'),
+                            value: userLastDayVC.map((user, index) => `${index + 1}. ${user.name}  <a:arrowegs:1038546626765144064> ${dailyMsgvc[index]} minutes in vc today.`).join('\n'),
                             inline: false
                         }
 
@@ -246,17 +246,17 @@ module.exports = {
             .addFields(
                 {
                     name: '__All-time leaderboard__',
-                    value: userAllTime.map((user, index) => `${index + 1}. ${userMention(user.uid)} <a:arrowyellow:1038546631689252945> ${user.messageCount} messages in total.`).join('\n'),
+                    value: userAllTime.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1038546631689252945> ${user.messageCount} messages in total.`).join('\n'),
                     inline: false
                 },
                 {
                     name: '__Weekly leaderboard__',
-                    value: userLastWeek.map((user, index) => `${index + 1}. ${userMention(user.uid)} <a:arrow_purple:1142745834795048971> ${weeklyMsg[index]} messages this week.`).join('\n'),
+                    value: userLastWeek.map((user, index) => `${index + 1}. ${user.name} <a:arrow_purple:1142745834795048971> ${weeklyMsg[index]} messages this week.`).join('\n'),
                     inline: false
                 },
                 {
                     name: '__Daily leaderboard__',
-                    value: userLastDay.map((user, index) => `${index + 1}. ${userMention(user.uid)} <a:arrowegs:1038546626765144064> ${dailyMsg[index]} messages today.`).join('\n'),
+                    value: userLastDay.map((user, index) => `${index + 1}. ${user.name} <a:arrowegs:1038546626765144064> ${dailyMsg[index]} messages today.`).join('\n'),
                     inline: false
                 },
             )
@@ -313,17 +313,17 @@ module.exports = {
                     .addFields(
                         {
                             name: '__All-time leaderboard__',
-                            value: userAllTime.map((user, index) => `${index + 1}. ${userMention(user.uid)} <a:arrowyellow:1038546631689252945> ${user.messageCount} messages in total.`).join('\n'),
+                            value: userAllTime.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1038546631689252945> ${user.messageCount} messages in total.`).join('\n'),
                             inline: false
                         },
                         {
                             name: '__Weekly leaderboard__',
-                            value: userLastWeek.map((user, index) => `${index + 1}. ${userMention(user.uid)} <a:arrow_purple:1142745834795048971> ${weeklyMsg[index]} messages this week.`).join('\n'),
+                            value: userLastWeek.map((user, index) => `${index + 1}. ${user.name} <a:arrow_purple:1142745834795048971> ${weeklyMsg[index]} messages this week.`).join('\n'),
                             inline: false
                         },
                         {
                             name: '__Daily leaderboard__',
-                            value: userLastDay.map((user, index) => `${index + 1}. ${userMention(user.uid)} <a:arrowegs:1038546626765144064> ${dailyMsg[index]} messages today.`).join('\n'),
+                            value: userLastDay.map((user, index) => `${index + 1}. ${user.name} <a:arrowegs:1038546626765144064> ${dailyMsg[index]} messages today.`).join('\n'),
                             inline: false
                         },
                     )
