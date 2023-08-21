@@ -1,7 +1,7 @@
 const { Events, ActivityType, EmbedBuilder, userMention } = require('discord.js');
 const { Sequelize, Op } = require('sequelize');
 const { User, Count } = require('../../db');
-
+const { lb } = require('../../config.json')
 //chat
 async function getUser(startDate, endDate) {
     const result = await User.findAll({
@@ -69,7 +69,7 @@ module.exports = {
         client.user.setStatus('idel');
         client.user.setActivity("E-Girl Socials cute members", { type: ActivityType.Watching });
 
-        const channel = await client.channels.cache.get("1111556882088341505"); // channel id here
+        const channel = await client.channels.cache.get(lb); // channel id here
 
         await channel.bulkDelete(2, true).catch(error => {
             console.error(error);
