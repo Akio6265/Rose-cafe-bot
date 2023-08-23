@@ -45,17 +45,19 @@ module.exports = {
         }
         //daily weekly
         try {
-            let userCount = await Count.findOne({ where: { uid: message.author.id } });
-
-            if (!userCount) {
-                userCount = await Count.create({
-                    uid: message.author.id,
-                });
+            const [user, created] = await Count.findOrCreate({
+                where: { uid: message.author.id },
+            });
+            if (created) {
+                user.dailyMsg += 1;
+                user.weeklyMsg += 1;
+                await user.save().catch(error => console.error('Error:', error));
             }
-            userCount.dailyMsg += 1;
-            userCount.weeklyMsg += 1;
-
-            await userCount.save().catch(error => console.error('Error:', error));
+            if (user) {
+                user.dailyMsg += 1;
+                user.weeklyMsg += 1;
+                await user.save().catch(error => console.error('Error:', error));
+            }
         } catch (error) {
             console.error('Error:', error);
         };

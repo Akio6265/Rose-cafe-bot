@@ -331,12 +331,14 @@ module.exports = {
                     .setFooter({ text: `This leaderboard will update again at ${time}`, iconURL: "https://cdn.discordapp.com/attachments/1139856341381431376/1139981548955910324/image0.gif" });
 
                 await message.edit({ embeds: [updatedChat] });
-                await resetDaily();
             }, timer);
         });
 
-        setInterval(() => {
-            resetWeekly();
-        }, 7 * 24 * 60 * 60 * 1000 + 30000);
+        setInterval(async () => {
+            await resetDaily();
+        }, 24 * 60 * 60 * 1000);
+        setInterval(async () => {
+            await resetWeekly();
+        }, 7 * 24 * 60 * 60 * 1000);
     },
 };
