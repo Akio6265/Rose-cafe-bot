@@ -4,34 +4,22 @@ const { User, Count } = require('../../db');
 const { lb } = require('../../config.json')
 //chat
 async function getUser(startDate, endDate) {
-    const result = await User.findAll({
+    const result = await Count.findAll({
+        include: [User],
         where: {
             createdAt: {
                 [Sequelize.Op.between]: [startDate, endDate]
             }
         },
         order: [
-            ['messageCount', 'DESC']
+            ['dailyMsg', 'DESC'],
+            ['weeklyMsg', 'DESC']
         ],
         limit: 10
     });
     return result;
 };
-//vc
-async function getUserVc(startDate, endDate) {
-    const result = await User.findAll({
-        where: {
-            createdAt: {
-                [Sequelize.Op.between]: [startDate, endDate]
-            }
-        },
-        order: [
-            ['vcXp', 'DESC']
-        ],
-        limit: 10
-    });
-    return result;
-}
+
 //reset fun
 async function resetDaily() {
     try {
@@ -66,7 +54,7 @@ module.exports = {
     name: Events.ClientReady,
     once: true,
     async execute(client) {
-        console.log(`${client.user.username} is live now`);
+        console.log(`${client.user.username} is alive now`);
         client.user.setStatus('idel');
         client.user.setActivity("E-Girl Socials cute members", { type: ActivityType.Watching });
 
@@ -84,8 +72,32 @@ module.exports = {
         oneDayAgo.setDate(oneDayAgo.getDay() - 1);
 
         //vc
-        let userLastWeekVc = await getUserVc(oneWeekAgo, new Date()) ?? "No one yet lol";
-        let userLastDayVC = await getUserVc(oneDayAgo, new Date()) ?? "No one yet";
+
+        let userLastWeekVc = await Count.findAll({
+            include: [User],
+            where: {
+                createdAt: {
+                    [Sequelize.Op.between]: [oneWeekAgo, new Date()]
+                }
+            },
+            order: [
+                ['weeklyVc', 'DESC']
+            ],
+            limit: 10
+        }); "No one yet lol";
+        let userLastDayVC = await Count.findAll({
+            include: [User],
+            where: {
+                createdAt: {
+                    [Sequelize.Op.between]: [oneDayAgo, new Date()]
+                }
+            },
+            order: [
+                ['dailyVc', 'DESC'],
+
+            ],
+            limit: 10
+        }); "No one yet lol";
         let userAllTimeVC = await User.findAll({
             order: [
                 ["vcLevel", "DESC"],
@@ -120,17 +132,17 @@ module.exports = {
             .addFields(
                 {
                     name: '__All-time leaderboard__',
-                    value: userAllTimeVC.map((user, index) => `${index + 1}. ${user.name}> <a:arrowyellow:1038546631689252945> ${user.vcXp} xp in total.`).join('\n'),
+                    value: userAllTimeVC.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1038546631689252945> ${user.vcXp} xp in total.`).join('\n'),
                     inline: false
                 },
                 {
                     name: '__Weekly leaderboard__',
-                    value: userLastWeekVc.map((user, index) => `${index + 1}. ${user.name} <a:arrow_purple:1142745834795048971> ${weeklyMsgvc[index]} minutes in vc this week.`).join('\n'),
+                    value: userLastWeekVc.map((user, index) => `${index + 1}. ${user.User?.name ?? user.uid} <a:arrow_purple:1142745834795048971> ${weeklyMsgvc[index]} minutes in vc this week.`).join('\n'),
                     inline: false
                 },
                 {
                     name: '__Daily leaderboard__',
-                    value: userLastDayVC.map((user, index) => `${index + 1}. ${user.name}  <a:arrowegs:1038546626765144064> ${dailyMsgvc[index]} minutes in vc today.`).join('\n'),
+                    value: userLastDayVC.map((user, index) => `${index + 1}. ${user.User?.name ?? user.uid}  <a:arrowegs:1038546626765144064> ${dailyMsgvc[index]} minutes in vc today.`).join('\n'),
                     inline: false
                 }
             )
@@ -150,8 +162,32 @@ module.exports = {
                 let oneDayAgo = new Date();
                 oneDayAgo.setDate(oneDayAgo.getDay() - 1);
 
-                let userLastWeekVc = await getUserVc(oneWeekAgo, new Date()) ?? "No one yet lol";
-                let userLastDayVC = await getUserVc(oneDayAgo, new Date()) ?? "No one yet";
+                let userLastWeekVc = await Count.findAll({
+                    include: [User],
+                    where: {
+                        createdAt: {
+                            [Sequelize.Op.between]: [oneWeekAgo, new Date()]
+                        }
+                    },
+                    order: [
+                        ['weeklyVc', 'DESC']
+
+                    ],
+                    limit: 10
+                }); "No one yet lol";
+                let userLastDayVC = await Count.findAll({
+                    include: [User],
+                    where: {
+                        createdAt: {
+                            [Sequelize.Op.between]: [oneDayAgo, new Date()]
+                        }
+                    },
+                    order: [
+                        ['dailyVc', 'DESC']
+
+                    ],
+                    limit: 10
+                }); "No one yet lol";
                 let userAllTimeVC = await User.findAll({
                     order: [
                         ["vcLevel", "DESC"],
@@ -187,17 +223,17 @@ module.exports = {
                     .addFields(
                         {
                             name: '__All-time leaderboard__',
-                            value: userAllTimeVC.map((user, index) => `${index + 1}. ${user.name}> <a:arrowyellow:1038546631689252945> ${user.vcXp} xp in total.`).join('\n'),
+                            value: userAllTimeVC.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1038546631689252945> ${user.vcXp} xp in total.`).join('\n'),
                             inline: false
                         },
                         {
                             name: '__Weekly leaderboard__',
-                            value: userLastWeekVc.map((user, index) => `${index + 1}. ${user.name} <a:arrow_purple:1142745834795048971> ${weeklyMsgvc[index]} minutes in vc this week.`).join('\n'),
+                            value: userLastWeekVc.map((user, index) => `${index + 1}. ${user.User.name} <a:arrow_purple:1142745834795048971> ${weeklyMsgvc[index]} minutes in vc this week.`).join('\n'),
                             inline: false
                         },
                         {
                             name: '__Daily leaderboard__',
-                            value: userLastDayVC.map((user, index) => `${index + 1}. ${user.name}  <a:arrowegs:1038546626765144064> ${dailyMsgvc[index]} minutes in vc today.`).join('\n'),
+                            value: userLastDayVC.map((user, index) => `${index + 1}. ${user.User.name}  <a:arrowegs:1038546626765144064> ${dailyMsgvc[index]} minutes in vc today.`).join('\n'),
                             inline: false
                         }
 
@@ -215,8 +251,32 @@ module.exports = {
 
 
         //chat
-        let userLastWeek = await getUser(oneWeekAgo, new Date()) ?? "No one yet lol";
-        let userLastDay = await getUser(oneDayAgo, new Date()) ?? "No one yet";
+        let userLastWeek = await Count.findAll({
+            include: [User],
+            where: {
+                createdAt: {
+                    [Sequelize.Op.between]: [oneWeekAgo, new Date()]
+                }
+            },
+            order: [
+
+                ['weeklyMsg', 'DESC']
+            ],
+            limit: 10
+        });
+        let userLastDay = await Count.findAll({
+            include: [User],
+            where: {
+                createdAt: {
+                    [Sequelize.Op.between]: [oneDayAgo, new Date()]
+                }
+            },
+            order: [
+                ['dailyMsg', 'DESC'],
+
+            ],
+            limit: 10
+        });
         let userAllTime = await User.findAll({
             order: [
                 ['messageCount', 'DESC'],
@@ -257,12 +317,12 @@ module.exports = {
                 },
                 {
                     name: '__Weekly leaderboard__',
-                    value: userLastWeek.map((user, index) => `${index + 1}. ${user.name} <a:arrow_purple:1142745834795048971> ${weeklyMsg[index]} messages this week.`).join('\n'),
+                    value: userLastWeek.map((user, index) => `${index + 1}. ${user.User.name} <a:arrow_purple:1142745834795048971> ${weeklyMsg[index]} messages this week.`).join('\n'),
                     inline: false
                 },
                 {
                     name: '__Daily leaderboard__',
-                    value: userLastDay.map((user, index) => `${index + 1}. ${user.name} <a:arrowegs:1038546626765144064> ${dailyMsg[index]} messages today.`).join('\n'),
+                    value: userLastDay.map((user, index) => `${index + 1}. ${user.User.name} <a:arrowegs:1038546626765144064> ${dailyMsg[index]} messages today.`).join('\n'),
                     inline: false
                 },
             )
@@ -284,8 +344,32 @@ module.exports = {
                 let oneDayAgo = new Date();
                 oneDayAgo.setDate(oneDayAgo.getDay() - 1);
 
-                let userLastWeek = await getUser(oneWeekAgo, new Date()) ?? "No one yet lol";
-                let userLastDay = await getUser(oneDayAgo, new Date()) ?? "No one yet";
+                let userLastWeek = await Count.findAll({
+                    include: [User],
+                    where: {
+                        createdAt: {
+                            [Sequelize.Op.between]: [oneWeekAgo, new Date()]
+                        }
+                    },
+                    order: [
+
+                        ['weeklyMsg', 'DESC']
+                    ],
+                    limit: 10
+                });
+                let userLastDay = await Count.findAll({
+                    include: [User],
+                    where: {
+                        createdAt: {
+                            [Sequelize.Op.between]: [oneDayAgo, new Date()]
+                        }
+                    },
+                    order: [
+                        ['dailyMsg', 'DESC'],
+
+                    ],
+                    limit: 10
+                });
                 let userAllTime = await User.findAll({
                     order: [
                         ['messageCount', 'DESC'],
@@ -326,12 +410,12 @@ module.exports = {
                         },
                         {
                             name: '__Weekly leaderboard__',
-                            value: userLastWeek.map((user, index) => `${index + 1}. ${user.name} <a:arrow_purple:1142745834795048971> ${weeklyMsg[index]} messages this week.`).join('\n'),
+                            value: userLastWeek.map((user, index) => `${index + 1}. ${user.User.name} <a:arrow_purple:1142745834795048971> ${weeklyMsg[index]} messages this week.`).join('\n'),
                             inline: false
                         },
                         {
                             name: '__Daily leaderboard__',
-                            value: userLastDay.map((user, index) => `${index + 1}. ${user.name} <a:arrowegs:1038546626765144064> ${dailyMsg[index]} messages today.`).join('\n'),
+                            value: userLastDay.map((user, index) => `${index + 1}. ${user.User.name} <a:arrowegs:1038546626765144064> ${dailyMsg[index]} messages today.`).join('\n'),
                             inline: false
                         },
                     )

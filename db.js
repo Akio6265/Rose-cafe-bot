@@ -52,6 +52,7 @@ const User = sequelize.define('User', {
         defaultValue: 1
     }
 }, {
+    modelName: "User",
     tableName: 'user',
     timestamps: true,
 });
@@ -80,11 +81,13 @@ const Count = sequelize.define("count", {
         type: DataTypes.INTEGER,
         defaultValue: 0
     }
-
 });
 sequelize.sync({ alter: true })
     .then(() => console.log('tables, set'))
-    .catch(err => console.log(err))
+    .catch(err => console.log(err));
+
+User.hasOne(Count, { foreignKey: 'uid' });
+Count.belongsTo(User, { foreignKey: 'uid' });
 module.exports = {
     User, Count
 }
