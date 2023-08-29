@@ -1,4 +1,4 @@
-const { Events, ActivityType, EmbedBuilder, userMention } = require('discord.js');
+const { Events, ActivityType, EmbedBuilder, time } = require('discord.js');
 const { Sequelize, Op } = require('sequelize');
 const { User, Count } = require('../../db');
 const { lb } = require('../../config.json')
@@ -16,7 +16,7 @@ async function getUser(startDate, endDate) {
         limit: 10
     });
     return result;
-}
+};
 //vc
 async function getUserVc(startDate, endDate) {
     const result = await User.findAll({
@@ -39,7 +39,7 @@ async function resetDaily() {
         for (const user of users) {
             user.dailyMsg = 0;
             user.dailyVc = 0
-            await user.save().catch(error => console.error('Error:', error));;
+            await user.save().catch(error => console.error('Error:', error));
         }
     } catch (error) {
         console.error('Error:', error);
@@ -50,8 +50,9 @@ async function resetWeekly() {
         const users = await Count.findAll();
         for (const user of users) {
             user.weeklyMsg = 0;
-            user.weeklVc = 0;
-            await user.save().catch(error => console.error('Error:', error));
+            user.weeklyVc = 0;
+            await user.save()
+                .catch(error => console.error('Error:', error));
         }
     } catch (error) {
         console.error('Error:', error);
@@ -74,7 +75,7 @@ module.exports = {
         await channel.bulkDelete(2, true).catch(error => {
             console.error(error);
         });
-        let time = new Date(Date.now() + (24 * 60 * 60 * 1000)).toLocaleString();
+        let timeStamp = `last updated ${time(new Date(), "R")}`;
 
         let oneWeekAgo = new Date();
         oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
@@ -134,11 +135,13 @@ module.exports = {
                 }
             )
             .setImage('https://cdn.discordapp.com/attachments/1139856341381431376/1139985585411473408/divider1.gif')
-            .setFooter({ text: `This leaderboard will update again at ${time}`, iconURL: "https://cdn.discordapp.com/attachments/1139856341381431376/1139981548955910324/image0.gif" });
+            .setTimestamp()
+            .setFooter({ text: `This leaderboard updates every 24 hour`, iconURL: "https://cdn.discordapp.com/attachments/1139856341381431376/1139981548955910324/image0.gif" });
 
 
         channel.send({
-            embeds: [vc]
+            embeds: [vc],
+            content: timeStamp
         }).then((message) => {
             setInterval(async () => {
                 let oneWeekAgo = new Date();
@@ -176,7 +179,7 @@ module.exports = {
                     let msg = x?.dailyVc ?? "0"
                     dailyMsgvc.push(msg);
                 }
-                let time = new Date(Date.now() + (24 * 60 * 60 * 1000)).toLocaleString();
+                let timeStamp = `last updated ${time(new Date(), "R")}`;
                 let updatedChat = new EmbedBuilder()
                     .setTitle("Vc Leaderboard")
                     .setColor(0xffa8ff)
@@ -200,10 +203,13 @@ module.exports = {
 
                     )
                     .setImage('https://cdn.discordapp.com/attachments/1139856341381431376/1139985585411473408/divider1.gif')
-                    .setFooter({ text: `This leaderboard will update again at ${time}`, iconURL: "https://cdn.discordapp.com/attachments/1139856341381431376/1139981548955910324/image0.gif" });
+                    .setTimestamp()
+                    .setFooter({ text: `This leaderboard updates every 24 hour`, iconURL: "https://cdn.discordapp.com/attachments/1139856341381431376/1139981548955910324/image0.gif" });
 
-                await message.edit({ embeds: [updatedChat] });
-                await resetWeekly();
+                await message.edit({
+                    embeds: [updatedChat],
+                    content: timeStamp
+                });
             }, 24 * 60 * 60 * 1000);
         });
 
@@ -260,16 +266,18 @@ module.exports = {
                     inline: false
                 },
             )
+            .setTimestamp()
             .setImage('https://cdn.discordapp.com/attachments/1139856341381431376/1139985585411473408/divider1.gif')
-            .setFooter({ text: `This leaderboard will update again at ${time}`, iconURL: "https://cdn.discordapp.com/attachments/1139856341381431376/1139981548955910324/image0.gif" });
+            .setFooter({ text: `This leaderboard updates every 24 hour`, iconURL: "https://cdn.discordapp.com/attachments/1139856341381431376/1139981548955910324/image0.gif" });
 
 
         await channel.send({
-            embeds: [chat]
+            embeds: [chat],
+            content: timeStamp
         }).then((message) => {
             let timer = 24 * 60 * 60 * 1000;
             setInterval(async () => {
-                let time = new Date(Date.now() + (24 * 60 * 60 * 1000)).toLocaleString();
+                let timeStamp = `last updated ${time(new Date(), "R")}`;
                 let oneWeekAgo = new Date();
                 oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
@@ -293,16 +301,16 @@ module.exports = {
                             uid: user.uid
                         }
                     });
-                    let msg = x?.weeklyMsg ?? "0"
+                    let msg = x?.weeklyMsg ?? "0";
                     weeklyMsg.push(msg);
-                };
+                }
                 for (const user of userLastDay) {
                     let x = await Count.findOne({
                         where: {
                             uid: user.uid
                         }
                     });
-                    let msg = x?.dailyMsg ?? "0"
+                    let msg = x?.dailyMsg ?? "0";
                     dailyMsg.push(msg);
                 }
 
@@ -327,10 +335,14 @@ module.exports = {
                             inline: false
                         },
                     )
+                    .setTimestamp()
                     .setImage('https://cdn.discordapp.com/attachments/1139856341381431376/1139985585411473408/divider1.gif')
-                    .setFooter({ text: `This leaderboard will update again at ${time}`, iconURL: "https://cdn.discordapp.com/attachments/1139856341381431376/1139981548955910324/image0.gif" });
+                    .setFooter({ text: `This leaderboard updates every 24 hour`, iconURL: "https://cdn.discordapp.com/attachments/1139856341381431376/1139981548955910324/image0.gif" });
 
-                await message.edit({ embeds: [updatedChat] });
+                await message.edit({
+                    embeds: [updatedChat],
+                    content: timeStamp
+                });
             }, timer);
         });
 

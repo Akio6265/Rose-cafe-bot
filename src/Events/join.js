@@ -1,5 +1,5 @@
 const { Events, GuildMember, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, userMention } = require('discord.js');
-
+const { gId } = require('../../config.json')
 module.exports = {
     name: Events.GuildMemberAdd,
     /**
@@ -7,10 +7,10 @@ module.exports = {
      * @param {GuildMember} member 
      */
     async execute(members) {
-        if (members.guild.id !== '1029523457240739860') return;
+        if (members.guild.id !== gId) return;
 
         const member = await members.guild.members.fetch(members.id);
-        const channel = await members.guild.channels.fetch('1123552387760672778');
+        const channel = await members.guild.channels.fetch('1145668742706122862');
         const link = new ButtonBuilder()
             .setLabel('Click this!')
             .setURL('https://discord.gg/socializing')
@@ -31,15 +31,19 @@ module.exports = {
             .addComponents(link, roles, vc);
 
 
-        // const welcome = new EmbedBuilder()
-        //     .setColor(0xfab4e3)
-        //     .setThumbnail('https://cdn.discordapp.com/attachments/1139856341381431376/1139981548955910324/image0.gif')
-        //     .setAuthor({ name: `Welcome ${member.user.username} in E-Girl social!`, iconURL: member.user.displayAvatarURL({ dynamic: true }) })
-        //     .setDescription('<a:EGS_CLOUD:1124928678535630849>  **Come chat with us in** https://discord.com/channels/1029523457240739860/1123552387760672778\n\n<a:EGSCLOUD:1124928621694427156>  [Come join us with VC!](https://discord.com/channels/1029523457240739860/1056072538674970694)\n\n<a:EGSCLOUD:1124928621694427156>  **feel free to check out our giveaways **https://discord.com/channels/1029523457240739860/1133162151662604438 https://discord.com/channels/1029523457240739860/1129470784654557294 https://discord.com/channels/1029523457240739860/1139692436323565668')
-        //     .setImage('https://cdn.discordapp.com/attachments/1139856341381431376/1139985585411473408/divider1.gif')
-        //     .setFooter({ text: 'E-Girl social wishes you a pleasent stay' });
+        const welcome = new EmbedBuilder()
+            .setColor(0xfab4e3)
+            .setThumbnail('https://cdn.discordapp.com/attachments/1139856341381431376/1139981548955910324/image0.gif')
+            .setAuthor({ name: `Welcome ${member.user.username} in E-Girl social!`, iconURL: member.user.displayAvatarURL({ dynamic: true }) })
+            .setDescription('<a:EGS_CLOUD:1124928678535630849>  **Come chat with us in** https://discord.com/channels/1029523457240739860/1123552387760672778\n\n<a:EGSCLOUD:1124928621694427156>  [Come join us with VC!](https://discord.com/channels/1029523457240739860/1056072538674970694)\n\n<a:EGSCLOUD:1124928621694427156>  **feel free to check out our giveaways **https://discord.com/channels/1029523457240739860/1133162151662604438 https://discord.com/channels/1029523457240739860/1129470784654557294 https://discord.com/channels/1029523457240739860/1139692436323565668')
+            .setImage('https://cdn.discordapp.com/attachments/1139856341381431376/1139985585411473408/divider1.gif')
+            .setFooter({ text: 'E-Girl social wishes you a pleasent stay' });
 
-        channel.send({ content: `<a:1499sparkleheart:1046448101860331600> welcome ${userMention(member.user.id)} <a:1499sparkleheart:1046448101860331600>`, components: [row] });
+        channel.send({
+            embeds: [welcome],
+            content: `<a:1499sparkleheart:1046448101860331600> welcome ${userMention(member.user.id)} <a:1499sparkleheart:1046448101860331600>`,
+            components: [row]
+        });
 
 
     }
