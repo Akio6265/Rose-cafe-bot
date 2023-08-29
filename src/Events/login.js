@@ -2,23 +2,6 @@ const { Events, ActivityType, EmbedBuilder, time } = require('discord.js');
 const { Sequelize, Op } = require('sequelize');
 const { User, Count } = require('../../db');
 const { lb } = require('../../config.json')
-//chat
-async function getUser(startDate, endDate) {
-    const result = await Count.findAll({
-        include: [User],
-        where: {
-            createdAt: {
-                [Sequelize.Op.between]: [startDate, endDate]
-            }
-        },
-        order: [
-            ['dailyMsg', 'DESC'],
-            ['weeklyMsg', 'DESC']
-        ],
-        limit: 10
-    });
-    return result;
-};
 
 //reset fun
 async function resetDaily() {

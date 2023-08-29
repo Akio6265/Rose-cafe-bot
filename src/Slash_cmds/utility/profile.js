@@ -31,11 +31,12 @@ module.exports = {
         const requireExp = Math.pow(userData.chatLevel, 2) * 250 - Math.pow(userData.chatLevel - 1, 2) * 250;
         const xp = userData.chatXp - Math.pow(userData.chatLevel - 1, 2) * 250;
         const tag = user.username;
+        const status = member.presence?.status ?? "online"
         const username = member.nickname ?? user.globalName ?? user.username ?? "??";
         const rank = new canvacord.Rank()
             .setAvatar(img)
             .setUsername(username)
-            .setStatus(member.presence.status)
+            .setStatus(status)
             .setCurrentXP(xp)
             .setRequiredXP(requireExp)
             .setProgressBar("#7482a3")
@@ -45,16 +46,23 @@ module.exports = {
             .setOverlay("#5c657a", 0.65)
             .setDiscriminator(tag)
             .setLevel(userData.chatLevel)
+        try {
 
-        rank.build()
-            .then(data => {
-                const buffer = Buffer.from(data);
-                const attachment = new AttachmentBuilder(buffer, "RankCard.png");
-                interaction.reply({
-                    files: [attachment]
-                });
-            });
 
+            rank.build()
+                .then(data => {
+                    const buffer = Buffer.from(data);
+                    const attachment = new AttachmentBuilder(buffer, "RankCard.png");
+                    interaction.reply({
+                        files: [attachment]
+                    })
+                        .catch(err => console.err(err));
+                })
+                .catch(err => console.err(err))
+                ;
+        } catch (err) {
+            console.err(err)
+        }
 
     },
 };
