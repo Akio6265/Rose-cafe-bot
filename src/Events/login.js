@@ -67,7 +67,7 @@ module.exports = {
                 ['weeklyVc', 'DESC']
             ],
             limit: 10
-        }); "No one yet lol";
+        });
         let userLastDayVC = await Count.findAll({
             include: [User],
             where: {
@@ -80,7 +80,7 @@ module.exports = {
 
             ],
             limit: 10
-        }); "No one yet lol";
+        });
         let userAllTimeVC = await User.findAll({
             order: [
                 ["vcLevel", "DESC"],
@@ -108,6 +108,7 @@ module.exports = {
             let msg = x?.dailyVc ?? "0"
             dailyMsgvc.push(msg);
         }
+        const defaultValue = "No user";
         const vc = new EmbedBuilder()
             .setTitle("Vc Leaderboard")
             .setColor(0xffa8ff)
@@ -115,17 +116,17 @@ module.exports = {
             .addFields(
                 {
                     name: '__All-time leaderboard__',
-                    value: userAllTimeVC.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1038546631689252945> ${user.vcXp} xp in total.`).join('\n'),
+                    value: userAllTimeVC.length > 0 ? userAllTimeVC.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1038546631689252945> ${user.vcXp} xp in total.`).join('\n') : defaultValue,
                     inline: false
                 },
                 {
                     name: '__Weekly leaderboard__',
-                    value: userLastWeekVc.map((user, index) => `${index + 1}. ${user.User?.name ?? user.uid} <a:arrow_purple:1142745834795048971> ${weeklyMsgvc[index]} minutes in vc this week.`).join('\n'),
+                    value: userLastWeekVc.length > 0 ? userLastWeekVc.map((user, index) => `${index + 1}. ${user.User?.name ?? user.uid} <a:arrow_purple:1142745834795048971> ${weeklyMsgvc[index]} minutes in vc this week.`).join('\n') : defaultValue,
                     inline: false
                 },
                 {
                     name: '__Daily leaderboard__',
-                    value: userLastDayVC.map((user, index) => `${index + 1}. ${user.User?.name ?? user.uid}  <a:arrowegs:1038546626765144064> ${dailyMsgvc[index]} minutes in vc today.`).join('\n'),
+                    value: userLastDayVC.length > 0 ? userLastDayVC.map((user, index) => `${index + 1}. ${user.User?.name ?? user.uid}  <a:arrowegs:1038546626765144064> ${dailyMsgvc[index]} minutes in vc today.`).join('\n') : defaultValue,
                     inline: false
                 }
             )
@@ -157,7 +158,7 @@ module.exports = {
 
                     ],
                     limit: 10
-                }); "No one yet lol";
+                });
                 let userLastDayVC = await Count.findAll({
                     include: [User],
                     where: {
@@ -170,7 +171,7 @@ module.exports = {
 
                     ],
                     limit: 10
-                }); "No one yet lol";
+                });
                 let userAllTimeVC = await User.findAll({
                     order: [
                         ["vcLevel", "DESC"],
@@ -206,17 +207,17 @@ module.exports = {
                     .addFields(
                         {
                             name: '__All-time leaderboard__',
-                            value: userAllTimeVC.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1038546631689252945> ${user.vcXp} xp in total.`).join('\n'),
+                            value: userAllTimeVC.length > 0 ? userAllTimeVC.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1038546631689252945> ${user.vcXp} xp in total.`).join('\n') : defaultValue,
                             inline: false
                         },
                         {
                             name: '__Weekly leaderboard__',
-                            value: userLastWeekVc.map((user, index) => `${index + 1}. ${user.User.name} <a:arrow_purple:1142745834795048971> ${weeklyMsgvc[index]} minutes in vc this week.`).join('\n'),
+                            value: userLastWeekVc.length > 0 ? userLastWeekVc.map((user, index) => `${index + 1}. ${user.User?.name ?? user.uid} <a:arrow_purple:1142745834795048971> ${weeklyMsgvc[index]} minutes in vc this week.`).join('\n') : defaultValue,
                             inline: false
                         },
                         {
                             name: '__Daily leaderboard__',
-                            value: userLastDayVC.map((user, index) => `${index + 1}. ${user.User.name}  <a:arrowegs:1038546626765144064> ${dailyMsgvc[index]} minutes in vc today.`).join('\n'),
+                            value: userLastDayVC.length > 0 ? userLastDayVC.map((user, index) => `${index + 1}. ${user.User?.name ?? user.uid}  <a:arrowegs:1038546626765144064> ${dailyMsgvc[index]} minutes in vc today.`).join('\n') : defaultValue,
                             inline: false
                         }
 
@@ -277,7 +278,7 @@ module.exports = {
             });
             let msg = x?.weeklyMsg ?? "0"
             weeklyMsg.push(msg);
-        };
+        }
         for (const user of userLastDay) {
             let x = await Count.findOne({
                 where: {
@@ -295,17 +296,17 @@ module.exports = {
             .addFields(
                 {
                     name: '__All-time leaderboard__',
-                    value: userAllTime.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1038546631689252945> ${user.messageCount} messages in total.`).join('\n'),
+                    value: userAllTime.length > 0 ? userAllTime.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1038546631689252945> ${user.messageCount} messages in total.`).join('\n') : defaultValue,
                     inline: false
                 },
                 {
                     name: '__Weekly leaderboard__',
-                    value: userLastWeek.map((user, index) => `${index + 1}. ${user.User.name} <a:arrow_purple:1142745834795048971> ${weeklyMsg[index]} messages this week.`).join('\n'),
+                    value: userLastWeek.length > 0 ? userLastWeek.map((user, index) => `${index + 1}. ${user.User.name} <a:arrow_purple:1142745834795048971> ${weeklyMsg[index]} messages this week.`).join('\n') : defaultValue,
                     inline: false
                 },
                 {
                     name: '__Daily leaderboard__',
-                    value: userLastDay.map((user, index) => `${index + 1}. ${user.User.name} <a:arrowegs:1038546626765144064> ${dailyMsg[index]} messages today.`).join('\n'),
+                    value: userLastDay.length > 0 ? userLastDay.map((user, index) => `${index + 1}. ${user.User.name} <a:arrowegs:1038546626765144064> ${dailyMsg[index]} messages today.`).join('\n') : defaultValue,
                     inline: false
                 },
             )
@@ -388,17 +389,17 @@ module.exports = {
                     .addFields(
                         {
                             name: '__All-time leaderboard__',
-                            value: userAllTime.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1038546631689252945> ${user.messageCount} messages in total.`).join('\n'),
+                            value: userAllTime.length > 0 ? userAllTime.map((user, index) => `${index + 1}. ${user.name} <a:arrowyellow:1038546631689252945> ${user.messageCount} messages in total.`).join('\n') : defaultValue,
                             inline: false
                         },
                         {
                             name: '__Weekly leaderboard__',
-                            value: userLastWeek.map((user, index) => `${index + 1}. ${user.User.name} <a:arrow_purple:1142745834795048971> ${weeklyMsg[index]} messages this week.`).join('\n'),
+                            value: userLastWeek.length > 0 ? userLastWeek.map((user, index) => `${index + 1}. ${user.User.name} <a:arrow_purple:1142745834795048971> ${weeklyMsg[index]} messages this week.`).join('\n') : defaultValue,
                             inline: false
                         },
                         {
                             name: '__Daily leaderboard__',
-                            value: userLastDay.map((user, index) => `${index + 1}. ${user.User.name} <a:arrowegs:1038546626765144064> ${dailyMsg[index]} messages today.`).join('\n'),
+                            value: userLastDay.length > 0 ? userLastDay.map((user, index) => `${index + 1}. ${user.User.name} <a:arrowegs:1038546626765144064> ${dailyMsg[index]} messages today.`).join('\n') : defaultValue,
                             inline: false
                         },
                     )
