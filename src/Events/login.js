@@ -43,7 +43,7 @@ module.exports = {
 
         const channel = await client.channels.cache.get(lb); // channel id here
 
-        await channel.bulkDelete(2, true).catch(error => {
+        await channel.bulkDelete(3, true).catch(error => {
             console.error(error);
         });
         let timeStamp = `last updated ${time(new Date(), "R")}`;
@@ -58,11 +58,7 @@ module.exports = {
 
         let userLastWeekVc = await Count.findAll({
             include: [User],
-            where: {
-                createdAt: {
-                    [Sequelize.Op.between]: [oneWeekAgo, new Date()]
-                }
-            },
+
             order: [
                 ['weeklyVc', 'DESC']
             ],
@@ -70,11 +66,7 @@ module.exports = {
         });
         let userLastDayVC = await Count.findAll({
             include: [User],
-            where: {
-                createdAt: {
-                    [Sequelize.Op.between]: [oneDayAgo, new Date()]
-                }
-            },
+
             order: [
                 ['dailyVc', 'DESC'],
 
@@ -148,11 +140,6 @@ module.exports = {
 
                 let userLastWeekVc = await Count.findAll({
                     include: [User],
-                    where: {
-                        createdAt: {
-                            [Sequelize.Op.between]: [oneWeekAgo, new Date()]
-                        }
-                    },
                     order: [
                         ['weeklyVc', 'DESC']
 
@@ -161,11 +148,6 @@ module.exports = {
                 });
                 let userLastDayVC = await Count.findAll({
                     include: [User],
-                    where: {
-                        createdAt: {
-                            [Sequelize.Op.between]: [oneDayAgo, new Date()]
-                        }
-                    },
                     order: [
                         ['dailyVc', 'DESC']
 
@@ -237,11 +219,7 @@ module.exports = {
         //chat
         let userLastWeek = await Count.findAll({
             include: [User],
-            where: {
-                createdAt: {
-                    [Sequelize.Op.between]: [oneWeekAgo, new Date()]
-                }
-            },
+
             order: [
 
                 ['weeklyMsg', 'DESC']
@@ -250,11 +228,7 @@ module.exports = {
         });
         let userLastDay = await Count.findAll({
             include: [User],
-            where: {
-                createdAt: {
-                    [Sequelize.Op.between]: [oneDayAgo, new Date()]
-                }
-            },
+
             order: [
                 ['dailyMsg', 'DESC'],
 
@@ -288,7 +262,7 @@ module.exports = {
             let msg = x?.dailyMsg ?? "0"
             dailyMsg.push(msg);
         }
-        // console.log(userAllTime)
+
         const chat = new EmbedBuilder()
             .setTitle("Chat Leaderboard")
             .setColor(0xffa8ff)
@@ -320,6 +294,12 @@ module.exports = {
             content: timeStamp
         }).then((message) => {
             let timer = 24 * 60 * 60 * 1000;
+            channel.send({ content: "Sorry about the miscalculation of daily and weekly members. It will be fixed eventually" })
+                .then(msg => {
+                    setTimeout(() => {
+                        msg.delete();
+                    }, timer);
+                })
             setInterval(async () => {
                 let timeStamp = `last updated ${time(new Date(), "R")}`;
                 let oneWeekAgo = new Date();
@@ -330,24 +310,13 @@ module.exports = {
 
                 let userLastWeek = await Count.findAll({
                     include: [User],
-                    where: {
-                        createdAt: {
-                            [Sequelize.Op.between]: [oneWeekAgo, new Date()]
-                        }
-                    },
                     order: [
-
                         ['weeklyMsg', 'DESC']
                     ],
                     limit: 10
                 });
                 let userLastDay = await Count.findAll({
                     include: [User],
-                    where: {
-                        createdAt: {
-                            [Sequelize.Op.between]: [oneDayAgo, new Date()]
-                        }
-                    },
                     order: [
                         ['dailyMsg', 'DESC'],
 
