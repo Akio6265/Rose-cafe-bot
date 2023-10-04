@@ -294,12 +294,7 @@ module.exports = {
             content: timeStamp
         }).then((message) => {
             let timer = 24 * 60 * 60 * 1000;
-            channel.send({ content: "Sorry about the miscalculation of daily and weekly members. It will be fixed eventually" })
-                .then(msg => {
-                    setTimeout(() => {
-                        msg.delete();
-                    }, timer);
-                })
+
             setInterval(async () => {
                 let timeStamp = `last updated ${time(new Date(), "R")}`;
                 let oneWeekAgo = new Date();
@@ -382,12 +377,16 @@ module.exports = {
                 });
             }, timer);
         });
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+        if (now.getDay() === 0 && currentHour === 0 && currentMinute === 0) {
+            // Run resetWeekly() if it's a Sunday and the time is 12 AM
+            await resetWeekly();
+        }
 
         setInterval(async () => {
             await resetDaily();
         }, 24 * 60 * 60 * 1000);
-        setInterval(async () => {
-            await resetWeekly();
-        }, 7 * 24 * 60 * 60 * 1000);
     },
 };

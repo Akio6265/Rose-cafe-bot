@@ -32,7 +32,7 @@ module.exports = {
         const xp = userData.chatXp - Math.pow(userData.chatLevel - 1, 2) * 250;
         const tag = user.username;
         const status = member.presence?.status ?? "online"
-        const username = member.nickname ?? user.globalName ?? user.username ?? "??";
+        const username = member?.nickname ?? user?.globalName ?? user?.username ?? "??";
         const rank = new canvacord.Rank()
             .setAvatar(img)
             .setUsername(username)

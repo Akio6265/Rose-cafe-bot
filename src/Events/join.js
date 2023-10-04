@@ -35,7 +35,7 @@ module.exports = {
             .setColor(0xfab4e3)
             .setThumbnail('https://cdn.discordapp.com/attachments/1139856341381431376/1139981548955910324/image0.gif')
             .setAuthor({ name: `Welcome ${member.user.username} in E-Girl social!`, iconURL: member.user.displayAvatarURL({ dynamic: true }) })
-            .setDescription(`**˚ ₊ <a:EGS_bow_pink:1139974472489783436> Welcome to E-Girl Social come chat﹒₊***\n** > 𓂃 .  [click here to chat were always active](https://discord.com/channels/1029523457240739860/1123552387760672778)**\n\n<a:EGSRAINBOW:1124928534549373008> ⸝⸝  [𓂃 . click to join our 24/7 active vcs](https://discord.gg/EDavG9p6Fd)`)
+            .setDescription(`**˚ ₊ <a:EGS_bow_pink:1139974472489783436> Welcome to E-Girl Social﹒₊***\n** > 𓂃 .  [click here to chat were always active](https://discord.com/channels/1029523457240739860/1123552387760672778)**\n\n<a:EGSRAINBOW:1124928534549373008> ⸝⸝  [𓂃 . click to join 24/7 active vcs](https://discord.gg/EDavG9p6Fd)`)
             .setImage('https://cdn.discordapp.com/attachments/1139856341381431376/1139985585411473408/divider1.gif')
             .setFooter({ text: 'E-Girl social wishes you a pleasent stay' });
 
